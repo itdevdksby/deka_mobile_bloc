@@ -45,8 +45,7 @@ List<PengaturanAutocodeAndroidEntity> listPengaturanAutocode = [
   PengaturanAutocodeAndroidEntity(code: "last-sync-hc_reason", value: "0"),
   PengaturanAutocodeAndroidEntity(code: "last-sync-hc_reason_type", value: "0"),
   PengaturanAutocodeAndroidEntity(code: "last-sync-hc_data_pic", value: "0"),
-  PengaturanAutocodeAndroidEntity(
-      code: "last-sync-android_auth_menu", value: "0"),
+  PengaturanAutocodeAndroidEntity(code: "last-sync-android_auth_menu", value: "0"),
   PengaturanAutocodeAndroidEntity(code: "hc-address", value: "0"),
   PengaturanAutocodeAndroidEntity(code: "hc-contact", value: "0"),
 ];

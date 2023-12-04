@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:deka_mobile/models/entities/master_auth_menu/master_auth_menu.dart';
+import 'package:deka_mobile/models/entities/master_pic/master_pic.dart';
 import 'package:intl/intl.dart';
 
 import '../config/database_config.dart';
@@ -27,6 +29,15 @@ abstract class SyncDataMasterRepository {
       SyncDataMasterModel model);
 
   Future<DataState<SyncDataMasterModel>> updateMasterReason(
+      SyncDataMasterModel model);
+
+  Future<DataState<SyncDataMasterModel>> updateMasterPic(
+      SyncDataMasterModel model);
+
+  Future<DataState<SyncDataMasterModel>> updateMasterAuthMenu(
+      SyncDataMasterModel model);
+
+  Future<DataState<SyncDataMasterModel>> updateMasterGlobalParameter(
       SyncDataMasterModel model);
 }
 
@@ -97,10 +108,10 @@ class SyncDataMasterRepositoryImpl extends SyncDataMasterRepository {
         id: int.parse(element.id!),
         name: element.name,
       ));
+
+      await updatePengaturanAutocode("last-sync-hc_reason_type", element.updatedAt ?? "0");
     });
 
-    await updatePengaturanAutocode(
-        "last-sync-hc_reason_type", model.hcReasonType?.last.updatedAt ?? "0");
     return DataSuccess(model);
   }
 
@@ -115,10 +126,58 @@ class SyncDataMasterRepositoryImpl extends SyncDataMasterRepository {
         keterangan: element.keterangan,
         potong_cuti: element.potongCuti,
       ));
+
+      await updatePengaturanAutocode("last-sync-hc_reason", element.updatedAt ?? "0");
     });
 
-    await updatePengaturanAutocode(
-        "last-sync-hc_reason", model.hcReasonType?.last.updatedAt ?? "0");
+    return DataSuccess(model);
+  }
+
+  @override
+  Future<DataState<SyncDataMasterModel>> updateMasterPic(SyncDataMasterModel model) async {
+    await _databaseConfig.masterPicDao.deleteAll();
+    model.hcDataPic?.forEach((element) async {
+      await _databaseConfig.masterPicDao.insertEntity(MasterPicEntity(
+        id: int.parse(element.code!),
+        name: element.name,
+        whatsapp: element.phone,
+      ));
+    });
+
+    await updatePengaturanAutocode("last-sync-hc_data_pic", "0");
+    return DataSuccess(model);
+  }
+
+  @override
+  Future<DataState<SyncDataMasterModel>> updateMasterAuthMenu(SyncDataMasterModel model) async {
+    await _databaseConfig.masterAuthMenuDao.deleteAll();
+    model.androidAuthMenu?.forEach((element) async {
+      await _databaseConfig.masterAuthMenuDao.insertEntity(MasterAuthMenuEntity(
+        id: int.parse(element.menuId!),
+        slug: element.menuSlug,
+        name: element.menuName,
+        is_read: int.parse(element.isRead!),
+        is_update: int.parse(element.isUpdate!),
+        is_create: int.parse(element.isCreate!),
+        is_delete: int.parse(element.isDelete!),
+        is_approval: int.parse(element.isApproval!)
+      ));
+    });
+
+    await updatePengaturanAutocode("last-sync-android_auth_menu", "0");
+    return DataSuccess(model);
+  }
+
+  @override
+  Future<DataState<SyncDataMasterModel>> updateMasterGlobalParameter(SyncDataMasterModel model) async {
+    if(model.hcAddress != null) {
+      await updatePengaturanAutocode(model.hcAddress!.last.slug!, model.hcAddress!.last.value!);
+    }
+
+    if(model.hcContact != null) {
+      await updatePengaturanAutocode(model.hcContact!.last.slug!, model.hcContact!.last.value!);
+    }
+
     return DataSuccess(model);
   }
 

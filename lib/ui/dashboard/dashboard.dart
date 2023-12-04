@@ -12,7 +12,6 @@ import '../../models/response/view_cuti_model.dart';
 import '../../resource/colors.dart';
 import '../../resource/showSnackbarMessage.dart';
 import '../../ui/dashboard/bloc/local/local_profile_bloc.dart';
-import '../../ui/dashboard/bloc/remote/remote_sync_data_master_bloc.dart';
 import '../../ui/dashboard/bloc/remote/remote_view_cuti_bloc.dart';
 import '../../ui/rekap_izin/rekap_izin.dart';
 
@@ -34,8 +33,6 @@ class _DashboardState extends State<Dashboard> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
-          BlocProvider<RemoteSyncDataMasterBloc>(
-              create: (context) => get()..add(SyncDataMaster())),
           BlocProvider<LocalProfileBloc>(
               create: (context) => get()..add(GetProfile())),
           BlocProvider<RemoteViewCutiBloc>(
@@ -47,33 +44,12 @@ class _DashboardState extends State<Dashboard> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildSyncDataMaster(),
                 _buildGreeting(),
                 _buildBody()
               ],
             ),
           ),
         ));
-  }
-
-  _buildSyncDataMaster() {
-    return BlocBuilder<RemoteSyncDataMasterBloc, BaseBlocState>(
-        builder: (_, state) {
-      if (state is BaseResponseError) {
-        messageError = state.error.message!;
-
-        WidgetsBinding.instance.addPostFrameCallback((_) => showSnackBarMessage(
-            context,
-            TypeMessage.ERROR,
-            messageError,
-            DurationMessage.LENGTH_SHORT));
-      }
-      if (state is SyncDataMasterResponseDone) {
-        print(state.model.hcAddress);
-      }
-
-      return Container();
-    });
   }
 
   _buildGreeting() {

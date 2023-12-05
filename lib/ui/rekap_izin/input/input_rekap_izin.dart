@@ -1,20 +1,25 @@
 // ignore_for_file: prefer_const_constructors, invalid_use_of_protected_member
 
 import 'dart:io';
-import '../../../core/data/bloc_state.dart';
-import '../../../extensions/constants.dart';
-import '../../../ui/dashboard/bloc/local/local_profile_bloc.dart';
-import '../../../ui/rekap_izin/input/bloc/remote/remote_save_rekap_izin_bloc.dart';
-import '../../../ui/rekap_izin/input/item/input_rekap_izin_tile.dart';
+
+import 'package:deka_mobile/models/entities/master_reason_type/master_reason_type.dart';
+import 'package:deka_mobile/ui/rekap_izin/input/bloc/local/local_get_master_bloc.dart';
+import 'package:deka_mobile/ui/rekap_izin/input/bloc/local/local_get_master_type_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/data/bloc_state.dart';
 import '../../../di/di.dart';
+import '../../../extensions/constants.dart';
 import '../../../models/domain/save_rekap_izin_domain.dart';
+import '../../../models/entities/master_reason_hc/master_reason_hc.dart';
 import '../../../resource/colors.dart';
 import '../../../resource/showSnackbarMessage.dart';
+import '../../../ui/dashboard/bloc/local/local_profile_bloc.dart';
+import '../../../ui/rekap_izin/input/bloc/remote/remote_save_rekap_izin_bloc.dart';
+import '../../../ui/rekap_izin/input/item/input_rekap_izin_tile.dart';
 
 class InputRekapIzin extends StatefulWidget {
   static const nameRoute = 'InputRekapIzin';
@@ -27,8 +32,11 @@ class InputRekapIzin extends StatefulWidget {
 class _InputRekapIzinState extends State<InputRekapIzin> {
   final saveDomain = SaveRekapIzinDomain();
   final _formKey = GlobalKey<FormState>();
+  final List<MasterReasonTypeEntity> listTypeIzin = [];
+  final List<MasterReasonHcEntity> listKategoriIzin = [];
   var isLoading = false;
-  File? selectedImage;
+  var isKeterangan = false;
+  var isJamKembali = false;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +45,22 @@ class _InputRekapIzinState extends State<InputRekapIzin> {
           create: (context) => get()..add(GetProfile())),
       BlocProvider<RemoteSaveRekapIzinBloc>(
           create: (context) => get()..onEvent(SaveRekapIzin(saveDomain))),
-    ], child: Scaffold(appBar: _buildAppBar(), body: _buildBody()));
+      BlocProvider<LocalGetMasterTypeBloc>(
+          create: (context) => get()..add(GetMasterReasonType())),
+      BlocProvider<LocalGetMasterBloc>(
+          create: (context) => get()..add(GetMasterReason(0))),
+    ], child: Scaffold(
+        appBar: _buildAppBar(),
+        body: SingleChildScrollView(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildReasonType(),
+                _buildReason(),
+                _buildBody()
+              ]),
+        )));
   }
 
   _buildAppBar() {
@@ -266,7 +289,94 @@ class _InputRekapIzinState extends State<InputRekapIzin> {
                                         ))),
                               ],
                             ),
-                            Padding(
+                            Visibility(visible: isJamKembali, child: Row(
+                              children: [
+                                Expanded(
+                                    child: Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 20,
+                                            right: 20,
+                                            top: 10,
+                                            bottom: 10),
+                                        child: TextFormField(
+                                          controller: TextEditingController()
+                                            ..text =
+                                                saveDomain.start_time ??
+                                                    "",
+                                          keyboardType: TextInputType.text,
+                                          textInputAction: TextInputAction.next,
+                                          style: TextStyle(fontSize: 15),
+                                          readOnly: true,
+                                          onTap: () {
+                                            _dialogStartTime(context);
+                                          },
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return "Isian ini masih kosong";
+                                            }
+                                            return null;
+                                          },
+                                          decoration: InputDecoration(
+                                              hintText: "Jam Mulai",
+                                              border: OutlineInputBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(
+                                                      30)),
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(30),
+                                                  borderSide: BorderSide(
+                                                      color: colorPrimary)),
+                                              contentPadding: EdgeInsets.only(
+                                                  left: 20, right: 20),
+                                              filled: true,
+                                              fillColor: Colors.black12),
+                                        ))),
+                                Expanded(
+                                    child: Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 20,
+                                            right: 20,
+                                            top: 10,
+                                            bottom: 10),
+                                        child: TextFormField(
+                                          controller: TextEditingController()
+                                            ..text =
+                                                saveDomain.end_time ?? "",
+                                          keyboardType: TextInputType.text,
+                                          textInputAction: TextInputAction.next,
+                                          style: TextStyle(fontSize: 15),
+                                          readOnly: true,
+                                          onTap: () {
+                                            _dialogEndTime(context);
+                                          },
+                                          validator: (value) {
+                                            if (value == null ||
+                                                value.isEmpty) {
+                                              return "Isian ini masih kosong";
+                                            }
+                                            return null;
+                                          },
+                                          decoration: InputDecoration(
+                                              hintText: "Jam Kembali",
+                                              border: OutlineInputBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(
+                                                      30)),
+                                              focusedBorder: OutlineInputBorder(
+                                                  borderRadius:
+                                                  BorderRadius.circular(30),
+                                                  borderSide: BorderSide(
+                                                      color: colorPrimary)),
+                                              contentPadding: EdgeInsets.only(
+                                                  left: 20, right: 20),
+                                              filled: true,
+                                              fillColor: Colors.black12),
+                                        ))),
+                              ],
+                            )),
+                            Visibility(visible: isKeterangan, child: Padding(
                                 padding: EdgeInsets.only(
                                     left: 20, right: 20, top: 10, bottom: 10),
                                 child: TextFormField(
@@ -283,17 +393,17 @@ class _InputRekapIzinState extends State<InputRekapIzin> {
                                       hintText: "Keterangan",
                                       border: OutlineInputBorder(
                                           borderRadius:
-                                              BorderRadius.circular(30)),
+                                          BorderRadius.circular(30)),
                                       focusedBorder: OutlineInputBorder(
                                           borderRadius:
-                                              BorderRadius.circular(30),
+                                          BorderRadius.circular(30),
                                           borderSide:
-                                              BorderSide(color: colorPrimary)),
+                                          BorderSide(color: colorPrimary)),
                                       contentPadding:
-                                          EdgeInsets.only(left: 20, right: 20),
+                                      EdgeInsets.only(left: 20, right: 20),
                                       filled: true,
                                       fillColor: Colors.black12),
-                                )),
+                                ))),
                             Padding(
                               padding: EdgeInsets.only(
                                   left: 20, right: 20, top: 10, bottom: 10),
@@ -330,7 +440,7 @@ class _InputRekapIzinState extends State<InputRekapIzin> {
                                             Radius.circular(20)),
                                         image: DecorationImage(
                                             image: FileImage(
-                                                selectedImage ?? File("")),
+                                                File(saveDomain.photo_1_temp ?? "")),
                                             fit: BoxFit.cover),
                                       ))
                                 ]),
@@ -371,7 +481,34 @@ class _InputRekapIzinState extends State<InputRekapIzin> {
             }));
   }
 
+  _buildReasonType() {
+    return Builder(builder: (context) =>
+        BlocBuilder<LocalGetMasterTypeBloc, BaseBlocState>(
+            builder: (_, state) {
+              if (state is BaseResponseError) {
+                WidgetsBinding.instance.addPostFrameCallback((_) =>
+                    showSnackBarMessage(context, TypeMessage.ERROR,
+                        state.error.message!, DurationMessage.LENGTH_SHORT));
+              }
+              if (state is GetMasterReasonTypeDone) {
+                listTypeIzin.clear();
+                state.model.forEach((element) {
+                  listTypeIzin.add(element);
+                });
+              }
+
+              return Container();
+            }
+        )
+    );
+  }
   _dialogTipeIzin(BuildContext context) {
+    if (listTypeIzin.isEmpty) {
+      return WidgetsBinding.instance.addPostFrameCallback((_) =>
+          showSnackBarMessage(context, TypeMessage.ERROR,
+              "Data tidak ditemukan", DurationMessage.LENGTH_SHORT));
+    }
+
     return showModalBottomSheet(
         context: context,
         isDismissible: true,
@@ -380,43 +517,84 @@ class _InputRekapIzinState extends State<InputRekapIzin> {
             borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
         builder: (context) => Container(
             height: double.infinity,
-            child: Column(children: [
-              Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Text("Pilih Salah Satu Item",
-                      style: TextStyle(
-                          color: colorText,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 16))),
-              ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return TipeIzinTile(
-                    position: index,
-                    model: listTipeIzin[index],
-                    onPressed: (position, model) {
-                      setState(() {
-                        saveDomain.reason_type = (position + 1).toString();
-                        saveDomain.reason_type_name = model;
-                        saveDomain.reason_id = null;
-                        saveDomain.reason_name = null;
+            child: SingleChildScrollView(
+              child: Column(children: [
+                Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Text("Pilih Salah Satu Item",
+                        style: TextStyle(
+                            color: colorText,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 16))),
+                ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return TipeIzinTile(
+                      position: index,
+                      model: listTypeIzin[index],
+                      onPressed: (position, model) {
+                        setState(() {
+                          saveDomain.reason_type = model.id.toString();
+                          saveDomain.reason_type_name = model.name;
+                          saveDomain.reason_id = null;
+                          saveDomain.reason_name = null;
 
-                        Navigator.pop(context);
-                      });
-                    },
-                  );
-                },
-                itemCount: listTipeIzin.length,
-              )
-            ])));
+                          isKeterangan = false;
+                          isJamKembali = false;
+                          if(model.name?.toLowerCase() == "full day"){
+                            isKeterangan = true;
+                            saveDomain.start_time = null;
+                            saveDomain.end_time = null;
+                          }else{
+                            isJamKembali = true;
+                            saveDomain.keterangan = null;
+                          }
+
+                          BlocProvider<LocalGetMasterBloc>(
+                              create: (context) => get()..add(GetMasterReason(model.id!)));
+
+                          Navigator.pop(context);
+                        });
+                      },
+                    );
+                  },
+                  itemCount: listTypeIzin.length,
+                )
+              ])))
+            );
   }
 
+  _buildReason() {
+    return Builder(builder: (context) =>
+        BlocBuilder<LocalGetMasterBloc, BaseBlocState>(
+            builder: (_, state) {
+              if (state is BaseResponseError) {
+                WidgetsBinding.instance.addPostFrameCallback((_) =>
+                    showSnackBarMessage(context, TypeMessage.ERROR,
+                        state.error.message!, DurationMessage.LENGTH_SHORT));
+              }
+              if (state is GetMasterReasonDone) {
+                listKategoriIzin.clear();
+                state.model.forEach((element) {
+                  listKategoriIzin.add(element);
+                });
+              }
+
+              return Container();
+            }
+        )
+    );
+  }
   _dialogKategoriIzin(BuildContext context) {
-    var list = listKategoriIzin1;
-    if (saveDomain.reason_type == "2") {
-      list = listKategoriIzin2;
+    final tempList = listKategoriIzin.where(
+            (element) => element.type == int.parse(saveDomain.reason_type!)).toList();
+    if (tempList.isEmpty) {
+      return WidgetsBinding.instance.addPostFrameCallback((_) =>
+          showSnackBarMessage(context, TypeMessage.ERROR,
+              "Data tidak ditemukan", DurationMessage.LENGTH_SHORT));
     }
+
     return showModalBottomSheet(
         context: context,
         isDismissible: true,
@@ -425,34 +603,36 @@ class _InputRekapIzinState extends State<InputRekapIzin> {
             borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
         builder: (context) => Container(
             height: double.infinity,
-            child: Column(children: [
-              Padding(
-                  padding: EdgeInsets.all(20),
-                  child: Text("Pilih Salah Satu Item",
-                      style: TextStyle(
-                          color: colorText,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 16))),
-              ListView.builder(
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemBuilder: (context, index) {
-                  return TipeIzinTile(
-                    position: index,
-                    model: list[index],
-                    onPressed: (position, model) {
-                      setState(() {
-                        saveDomain.reason_id = position.toString();
-                        saveDomain.reason_name = model;
+            child: SingleChildScrollView(
+              child: Column(children: [
+                Padding(
+                    padding: EdgeInsets.all(20),
+                    child: Text("Pilih Salah Satu Item",
+                        style: TextStyle(
+                            color: colorText,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 16))),
+                ListView.builder(
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) {
+                    return KategoriIzinTile(
+                      position: index,
+                      model: tempList[index],
+                      onPressed: (position, model) {
+                        setState(() {
+                          saveDomain.reason_id = model.id.toString();
+                          saveDomain.reason_name = model.name;
 
-                        Navigator.pop(context);
-                      });
-                    },
-                  );
-                },
-                itemCount: list.length,
-              )
-            ])));
+                          Navigator.pop(context);
+                        });
+                      },
+                    );
+                  },
+                  itemCount: tempList.length,
+                )
+              ])
+            )));
   }
 
   _dialogStartDate(BuildContext context) async {
@@ -488,6 +668,42 @@ class _InputRekapIzinState extends State<InputRekapIzin> {
     }
   }
 
+  _dialogStartTime(BuildContext context) async {
+    TimeOfDay? _picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.now(),
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+          child: child!,
+        );
+      });
+
+    if (_picked != null) {
+      setState(() {
+        saveDomain.start_time = _picked.format(context);
+      });
+    }
+  }
+
+  _dialogEndTime(BuildContext context) async {
+    TimeOfDay? _picked = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+        builder: (BuildContext context, Widget? child) {
+          return MediaQuery(
+            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+            child: child!,
+          );
+        });
+
+    if (_picked != null) {
+      setState(() {
+        saveDomain.end_time = _picked.format(context);
+      });
+    }
+  }
+
   Future<void> _dialogPhoto() async {
     final picked = await ImagePicker()
         .pickImage(source: ImageSource.camera, imageQuality: 70);
@@ -495,7 +711,6 @@ class _InputRekapIzinState extends State<InputRekapIzin> {
 
     setState(() {
       saveDomain.photo_1_temp = picked.path;
-      selectedImage = File(picked.path);
     });
   }
 }

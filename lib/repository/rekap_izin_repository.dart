@@ -3,6 +3,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:deka_mobile/models/entities/master_reason_hc/master_reason_hc.dart';
+import 'package:deka_mobile/models/entities/master_reason_type/master_reason_type.dart';
+
 import '../config/database_config.dart';
 import '../config/service/rekap_izin/rekap_izin_service.dart';
 import '../core/data/data_state.dart';
@@ -18,6 +21,10 @@ abstract class RekapIzinRepository {
 
   Future<DataState<ViewCutiModel>> getViewCuti();
 
+  Future<DataState<List<MasterReasonTypeEntity>>> getMasterReasonType();
+
+  Future<DataState<List<MasterReasonHcEntity>>> getMasterReason(int type);
+
   Future<DataState<List<RekapIzinModel>>> getRekapIzin();
 
   Future<DataState<String>> saveRekapIzin(SaveRekapIzinDomain domain);
@@ -32,10 +39,14 @@ class RekapIzinRepositoryImpl extends RekapIzinRepository {
 
   @override
   Future<DataState<ProfileEntity>> getProfile() async {
-    final models = await _databaseConfig.profileDao.getProfile();
-    if (models.isEmpty) throw DataFailed(ErrorModel());
+    try {
+      final models = await _databaseConfig.profileDao.getProfile();
+      if (models.isEmpty) throw DataFailed(ErrorModel());
 
-    return DataSuccess(models.first);
+      return DataSuccess(models.first);
+    } on ErrorModel catch (e) {
+      return DataFailed(e);
+    }
   }
 
   @override
@@ -89,6 +100,30 @@ class RekapIzinRepositoryImpl extends RekapIzinRepository {
           await _rekapIzinService.saveRekapIzin(data: data.toString());
 
       return DataSuccess(httpResponse.data.message!);
+    } on ErrorModel catch (e) {
+      return DataFailed(e);
+    }
+  }
+
+  @override
+  Future<DataState<List<MasterReasonTypeEntity>>> getMasterReasonType() async {
+    try {
+      final models = await _databaseConfig.masterReasonTypeDao.getMasterReasonType();
+      if (models.isEmpty) throw DataFailed(ErrorModel());
+
+      return DataSuccess(models);
+    } on ErrorModel catch (e) {
+      return DataFailed(e);
+    }
+  }
+
+  @override
+  Future<DataState<List<MasterReasonHcEntity>>> getMasterReason(int type) async {
+    try {
+      final models = await _databaseConfig.masterReasonHcDao.getMasterReasonHc();
+      if (models.isEmpty) throw DataFailed(ErrorModel());
+
+      return DataSuccess(models);
     } on ErrorModel catch (e) {
       return DataFailed(e);
     }

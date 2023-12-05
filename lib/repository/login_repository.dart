@@ -53,10 +53,14 @@ class LoginRepositoryImpl extends LoginRepository {
 
   @override
   Future<DataState<ProfileEntity>> getProfile() async {
-    final models = await _databaseConfig.profileDao.getProfile();
-    if (models.isEmpty) throw DataFailed(ErrorModel());
+    try {
+      final models = await _databaseConfig.profileDao.getProfile();
+      if (models.isEmpty) throw DataFailed(ErrorModel());
 
-    return DataSuccess(models.first);
+      return DataSuccess(models.first);
+    } on ErrorModel catch (e) {
+      return DataFailed(e);
+    }
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'package:deka_mobile/extensions/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -56,7 +57,7 @@ class RekapIzinTile extends StatelessWidget {
               color: Colors.black38,
             ),
             Text(
-              rekapIzin?.reasonName ?? "",
+              (rekapIzin?.reasonName ?? "").toString().toTitleCase(),
               style: const TextStyle(
                 fontSize: 12,
                 color: Colors.teal,

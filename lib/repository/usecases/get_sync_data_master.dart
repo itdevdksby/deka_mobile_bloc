@@ -5,6 +5,7 @@ import '../sync_data_master_repository.dart';
 abstract class SyncDataMasterUseCaseImpl<Type, Params> {
   Future<Type> syncDataMaster();
   Future<Type> updateMasterReasonType(SyncDataMasterModel model);
+  Future<Type> updateMasterReasonHc(SyncDataMasterModel model);
   Future<Type> updateMasterPic(SyncDataMasterModel model);
   Future<Type> updateMasterAuthMenu(SyncDataMasterModel model);
   Future<Type> updateMasterGlobalParameter(SyncDataMasterModel model);
@@ -28,9 +29,9 @@ class SyncDataMasterUseCase
     return _repository.updateMasterReasonType(model);
   }
 
-  Future<DataState<SyncDataMasterModel>> updateMasterReason(
-      SyncDataMasterModel model) {
-    return _repository.updateMasterReason(model);
+  @override
+  Future<DataState<SyncDataMasterModel>> updateMasterReasonHc(SyncDataMasterModel model) {
+    return _repository.updateMasterReasonHc(model);
   }
 
   @override

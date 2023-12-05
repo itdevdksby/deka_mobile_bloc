@@ -84,7 +84,7 @@ class MasterPicDaoImpl extends MasterPicDao {
 
   @override
   Future<void> deleteAll() async {
-    await _queryAdapter.queryNoReturn('DELETE FROM master_reason');
+    await _queryAdapter.queryNoReturn('DELETE FROM master_pic');
   }
 
   @override

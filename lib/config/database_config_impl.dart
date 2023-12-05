@@ -100,17 +100,17 @@ class _$DatabaseConfig extends DatabaseConfig {
       _pengaturanAutocodeAndroidDao ??=
           PengaturanAutocodeAndroidDaoImpl(database, changeListener);
 
-  MasterReasonDao? _masterReasonDao;
-  @override
-  MasterReasonDao get masterReasonDao =>
-      _masterReasonDao ??=
-          MasterReasonDaoImpl(database, changeListener);
-
   MasterReasonTypeDao? _masterReasonTypeDao;
   @override
   MasterReasonTypeDao get masterReasonTypeDao =>
       _masterReasonTypeDao ??=
           MasterReasonTypeDaoImpl(database, changeListener);
+
+  MasterReasonHcDao? _masterReasonHcDao;
+  @override
+  MasterReasonHcDao get masterReasonHcDao =>
+      _masterReasonHcDao ??=
+          MasterReasonHcDaoImpl(database, changeListener);
 
   MasterPicDao? _masterPicDao;
   @override

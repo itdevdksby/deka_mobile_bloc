@@ -2,13 +2,13 @@ import 'dart:convert';
 
 import 'package:deka_mobile/models/entities/master_auth_menu/master_auth_menu.dart';
 import 'package:deka_mobile/models/entities/master_pic/master_pic.dart';
+import 'package:deka_mobile/models/entities/master_reason_hc/master_reason_hc.dart';
 import 'package:intl/intl.dart';
 
 import '../config/database_config.dart';
 import '../config/service/other/sync_data_master_service.dart';
 import '../core/data/data_state.dart';
 import '../extensions/constants.dart';
-import '../models/entities/master_reason/master_reason.dart';
 import '../models/entities/master_reason_type/master_reason_type.dart';
 import '../models/entities/profile/profile.dart';
 import '../models/mapper/profile_mapper.dart';
@@ -28,7 +28,7 @@ abstract class SyncDataMasterRepository {
   Future<DataState<SyncDataMasterModel>> updateMasterReasonType(
       SyncDataMasterModel model);
 
-  Future<DataState<SyncDataMasterModel>> updateMasterReason(
+  Future<DataState<SyncDataMasterModel>> updateMasterReasonHc(
       SyncDataMasterModel model);
 
   Future<DataState<SyncDataMasterModel>> updateMasterPic(
@@ -106,7 +106,7 @@ class SyncDataMasterRepositoryImpl extends SyncDataMasterRepository {
       await _databaseConfig.masterReasonTypeDao
           .insertEntity(MasterReasonTypeEntity(
         id: int.parse(element.id!),
-        name: element.name,
+        name: element.name.toString().toTitleCase(),
       ));
 
       await updatePengaturanAutocode("last-sync-hc_reason_type", element.updatedAt ?? "0");
@@ -116,15 +116,14 @@ class SyncDataMasterRepositoryImpl extends SyncDataMasterRepository {
   }
 
   @override
-  Future<DataState<SyncDataMasterModel>> updateMasterReason(
-      SyncDataMasterModel model) async {
+  Future<DataState<SyncDataMasterModel>> updateMasterReasonHc(SyncDataMasterModel model) async {
     model.hcReason?.forEach((element) async {
-      await _databaseConfig.masterReasonDao.insertEntity(MasterReasonEntity(
-        code: element.code,
-        name: element.name,
+      await _databaseConfig.masterReasonHcDao.insertEntity(MasterReasonHcEntity(
+        id: int.parse(element.code!),
+        name: element.name.toString().toTitleCase(),
         type: int.parse(element.idType!),
         keterangan: element.keterangan,
-        potong_cuti: element.potongCuti,
+        potongCuti: element.potongCuti,
       ));
 
       await updatePengaturanAutocode("last-sync-hc_reason", element.updatedAt ?? "0");
@@ -139,7 +138,7 @@ class SyncDataMasterRepositoryImpl extends SyncDataMasterRepository {
     model.hcDataPic?.forEach((element) async {
       await _databaseConfig.masterPicDao.insertEntity(MasterPicEntity(
         id: int.parse(element.code!),
-        name: element.name,
+        name: element.name.toString().toTitleCase(),
         whatsapp: element.phone,
       ));
     });
@@ -156,11 +155,11 @@ class SyncDataMasterRepositoryImpl extends SyncDataMasterRepository {
         id: int.parse(element.menuId!),
         slug: element.menuSlug,
         name: element.menuName,
-        is_read: int.parse(element.isRead!),
-        is_update: int.parse(element.isUpdate!),
-        is_create: int.parse(element.isCreate!),
-        is_delete: int.parse(element.isDelete!),
-        is_approval: int.parse(element.isApproval!)
+        is_read: int.parse(element.isRead ?? "0"),
+        is_update: int.parse(element.isUpdate ?? "0"),
+        is_create: int.parse(element.isCreate ?? "0"),
+        is_delete: int.parse(element.isDelete ?? "0"),
+        is_approval: int.parse(element.isApproval ?? "0")
       ));
     });
 

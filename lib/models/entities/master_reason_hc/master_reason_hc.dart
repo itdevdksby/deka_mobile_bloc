@@ -4,24 +4,24 @@ import 'package:equatable/equatable.dart';
 import 'package:floor/floor.dart';
 import 'package:intl/intl.dart';
 
-@Entity(tableName: 'master_reason', primaryKeys: ['code'])
-class MasterReasonEntity extends Equatable {
-  String? code;
+@Entity(tableName: 'master_reason_hc', primaryKeys: ['id'])
+class MasterReasonHcEntity extends Equatable {
+  int? id;
   String? name;
   int? type;
   String? keterangan;
-  String? potong_cuti;
+  String? potongCuti;
   int? status = 1;
   int? statusKirim = 0;
   String? createdAt = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
   String? updatedAt = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
 
-  MasterReasonEntity({
-    this.code,
+  MasterReasonHcEntity({
+    this.id,
     this.name,
     this.type,
     this.keterangan,
-    this.potong_cuti,
+    this.potongCuti,
     this.status,
     this.statusKirim,
     this.createdAt,
@@ -31,11 +31,11 @@ class MasterReasonEntity extends Equatable {
   @override
   List<Object?> get props {
     return [
-      code,
+      id,
       name,
       type,
       keterangan,
-      potong_cuti,
+      potongCuti,
       status,
       statusKirim,
       createdAt,

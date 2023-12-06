@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 
 import '../../../core/data/bloc_state.dart';
 import '../../../di/di.dart';
@@ -11,7 +12,7 @@ import '../../../resource/showSnackbarMessage.dart';
 import 'bloc/remote/remote_reset_bloc.dart';
 
 class ResetPassword extends StatefulWidget {
-  static const nameRoute = 'ResetPassword';
+  static const nameRoute = '/ResetPassword';
   const ResetPassword({super.key});
 
   @override
@@ -53,7 +54,7 @@ class _ResetPasswordState extends State<ResetPassword> {
                 if (state is ResetResponseDone) {
                   _isLoading = false;
                   WidgetsBinding.instance
-                      .addPostFrameCallback((_) => Navigator.of(context).pop());
+                      .addPostFrameCallback((_) => Get.back());
                 }
 
                 return SingleChildScrollView(

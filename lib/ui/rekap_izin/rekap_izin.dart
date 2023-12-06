@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 
 import '../../core/data/bloc_state.dart';
 import '../../di/di.dart';
@@ -14,7 +15,7 @@ import 'input/input_rekap_izin.dart';
 import 'item/rekap_izin_tile.dart';
 
 class RekapIzin extends StatefulWidget {
-  static const nameRoute = 'RekapIzin';
+  static const nameRoute = '/RekapIzin';
   const RekapIzin({super.key});
 
   @override
@@ -59,14 +60,15 @@ class _RekapIzinState extends State<RekapIzin> {
               visible: _isShowAdd,
               child: Builder(
                   builder: (context) => FloatingActionButton(
+                      shape: CircleBorder(),
                       backgroundColor: colorPrimary,
                       onPressed: () async {
-                        await Navigator.of(context)
-                            .pushNamed(InputRekapIzin.nameRoute);
+                        await Get.toNamed(InputRekapIzin.nameRoute);;
+
                         BlocProvider.of<RemoteRekapIzinBloc>(context)
                             .add(GetRekapIzin());
                       },
-                      child: Icon(Icons.add)))),
+                      child: Icon(Icons.add, color: Colors.white)))),
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         ));
   }
@@ -113,6 +115,14 @@ class _RekapIzinState extends State<RekapIzin> {
                     itemBuilder: (context, index) {
                       return RekapIzinTile(
                         rekapIzin: state.model[index],
+                        onPressed: (model) async {
+                          await Get.toNamed(InputRekapIzin.nameRoute, arguments: {
+                            InputRekapIzin.argRekapIzin: model
+                          });
+
+                          BlocProvider.of<RemoteRekapIzinBloc>(context)
+                              .add(GetRekapIzin());
+                        },
                       );
                     },
                     itemCount: state.model.length,

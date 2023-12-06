@@ -4,24 +4,20 @@ import 'package:equatable/equatable.dart';
 import 'package:floor/floor.dart';
 import 'package:intl/intl.dart';
 
-@Entity(tableName: 'master_reason', primaryKeys: ['code'])
-class MasterReasonEntity extends Equatable {
-  String? code;
+@Entity(tableName: 'master_pic', primaryKeys: ['id'])
+class MasterPicEntity extends Equatable {
+  int? id;
   String? name;
-  int? type;
-  String? keterangan;
-  String? potong_cuti;
+  String? whatsapp;
   int? status = 1;
   int? statusKirim = 0;
   String? createdAt = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
   String? updatedAt = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
 
-  MasterReasonEntity({
-    this.code,
+  MasterPicEntity({
+    this.id,
     this.name,
-    this.type,
-    this.keterangan,
-    this.potong_cuti,
+    this.whatsapp,
     this.status,
     this.statusKirim,
     this.createdAt,
@@ -31,11 +27,9 @@ class MasterReasonEntity extends Equatable {
   @override
   List<Object?> get props {
     return [
-      code,
+      id,
       name,
-      type,
-      keterangan,
-      potong_cuti,
+      whatsapp,
       status,
       statusKirim,
       createdAt,

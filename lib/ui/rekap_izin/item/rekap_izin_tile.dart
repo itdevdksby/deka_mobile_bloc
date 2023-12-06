@@ -8,12 +8,12 @@ class RekapIzinTile extends StatelessWidget {
   final RekapIzinModel? rekapIzin;
   final bool? isRemovable;
   final void Function(RekapIzinModel rekapIzin)? onRemove;
-  final void Function(RekapIzinModel rekapIzin)? onArticlePressed;
+  final void Function(RekapIzinModel rekapIzin)? onPressed;
 
   const RekapIzinTile({
     Key? key,
     this.rekapIzin,
-    this.onArticlePressed,
+    this.onPressed,
     this.isRemovable = false,
     this.onRemove,
   }) : super(key: key);
@@ -114,8 +114,8 @@ class RekapIzinTile extends StatelessWidget {
   }
 
   void _onTap() {
-    if (onArticlePressed != null) {
-      onArticlePressed!(rekapIzin!);
+    if (onPressed != null) {
+      onPressed!(rekapIzin!);
     }
   }
 }

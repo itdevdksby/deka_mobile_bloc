@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../di/di.dart';
 import '../../../resource/theme.dart';
@@ -22,18 +23,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       theme: theme(),
       debugShowCheckedModeBanner: true,
+      defaultTransition: Transition.rightToLeft,
       initialRoute: Login.nameRoute,
-      routes: {
-        Login.nameRoute: (context) => Login(),
-        ResetPassword.nameRoute: (context) => ResetPassword(),
-        Register.nameRoute: (context) => Register(),
-        Dashboard.nameRoute: (context) => Dashboard(),
-        RekapIzin.nameRoute: (context) => RekapIzin(),
-        InputRekapIzin.nameRoute: (context) => InputRekapIzin(),
-      },
+      getPages: [
+        GetPage(name: Login.nameRoute,          page: () => Login()),
+        GetPage(name: ResetPassword.nameRoute,  page: () => ResetPassword()),
+        GetPage(name: Register.nameRoute,       page: () => Register()),
+        GetPage(name: Dashboard.nameRoute,      page: () => Dashboard()),
+        GetPage(name: RekapIzin.nameRoute,      page: () => RekapIzin()),
+        GetPage(name: InputRekapIzin.nameRoute, page: () => InputRekapIzin()),
+      ],
     );
   }
 }

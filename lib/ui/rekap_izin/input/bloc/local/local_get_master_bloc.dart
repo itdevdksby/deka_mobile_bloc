@@ -19,7 +19,6 @@ class LocalGetMasterBloc
     final dataState = await useCase.getMasterReason(type: event.type);
 
     if (dataState is DataSuccess) {
-      print("listKategoriIzin:${dataState.data?.first}");
       emit(GetMasterReasonDone(dataState.data!));
     }
 

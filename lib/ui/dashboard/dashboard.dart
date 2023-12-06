@@ -3,6 +3,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/data/bloc_state.dart';
@@ -16,7 +17,7 @@ import '../../ui/dashboard/bloc/remote/remote_view_cuti_bloc.dart';
 import '../../ui/rekap_izin/rekap_izin.dart';
 
 class Dashboard extends StatefulWidget {
-  static const nameRoute = 'Dashboard';
+  static const nameRoute = '/Dashboard';
 
   const Dashboard({super.key});
 
@@ -315,8 +316,7 @@ class _DashboardState extends State<Dashboard> {
                                   height: 25,
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      Navigator.of(context)
-                                          .pushNamed(RekapIzin.nameRoute);
+                                      Get.toNamed(RekapIzin.nameRoute);
                                     },
                                     style: ButtonStyle(
                                         backgroundColor:

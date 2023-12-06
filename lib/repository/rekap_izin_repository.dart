@@ -87,10 +87,12 @@ class RekapIzinRepositoryImpl extends RekapIzinRepository {
   Future<DataState<String>> saveRekapIzin(SaveRekapIzinDomain domain) async {
     try {
       if (domain.photo_1_temp != null) {
-        final imageBytes = await File(domain.photo_1_temp!).readAsBytes();
-        final photoBase64 = base64Encode(imageBytes);
+        if (!domain.photo_1_temp!.contains("https")) {
+          final imageBytes = await File(domain.photo_1_temp!).readAsBytes();
+          final photoBase64 = base64Encode(imageBytes);
 
-        domain.photo_1 = "data:@file/png;base64,$photoBase64";
+          domain.photo_1 = "data:@file/png;base64,$photoBase64";
+        }
       }
       domain.latitude = "37.4219983";
       domain.longitude = "-122.084";

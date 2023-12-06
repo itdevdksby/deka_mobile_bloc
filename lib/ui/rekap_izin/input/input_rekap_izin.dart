@@ -2,11 +2,15 @@
 
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:deka_mobile/core/picker_photo/picker_photo.dart';
 import 'package:deka_mobile/models/entities/master_reason_type/master_reason_type.dart';
+import 'package:deka_mobile/models/response/rekap_izin_model.dart';
 import 'package:deka_mobile/ui/rekap_izin/input/bloc/local/local_get_master_bloc.dart';
 import 'package:deka_mobile/ui/rekap_izin/input/bloc/local/local_get_master_type_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -22,7 +26,8 @@ import '../../../ui/rekap_izin/input/bloc/remote/remote_save_rekap_izin_bloc.dar
 import '../../../ui/rekap_izin/input/item/input_rekap_izin_tile.dart';
 
 class InputRekapIzin extends StatefulWidget {
-  static const nameRoute = 'InputRekapIzin';
+  static const nameRoute = '/InputRekapIzin';
+  static const argRekapIzin = 'argRekapIzin';
   const InputRekapIzin({super.key});
 
   @override
@@ -34,9 +39,55 @@ class _InputRekapIzinState extends State<InputRekapIzin> {
   final _formKey = GlobalKey<FormState>();
   final List<MasterReasonTypeEntity> listTypeIzin = [];
   final List<MasterReasonHcEntity> listKategoriIzin = [];
+  var isEnabled = true;
   var isLoading = false;
   var isKeterangan = false;
   var isJamKembali = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      final argModel = Get.arguments?[InputRekapIzin.argRekapIzin] == null
+          ? null
+          : Get.arguments?[InputRekapIzin.argRekapIzin] as RekapIzinModel;
+
+      if(!argModel.isNull) {
+        setState(() {
+          saveDomain.name = argModel?.name;
+          saveDomain.nik = argModel?.nik;
+          saveDomain.start_date = argModel?.startDate;
+          saveDomain.end_date = argModel?.endDate;
+          saveDomain.latitude = argModel?.latitude;
+          saveDomain.longitude = argModel?.longitude;
+          saveDomain.start_time = argModel?.startTime;
+          saveDomain.end_time = argModel?.endTime;
+          saveDomain.reason_type = argModel?.reasonType;
+          saveDomain.reason_type_name = argModel?.reasonTypeName;
+          saveDomain.reason_id = argModel?.reasonId;
+          saveDomain.reason_name = argModel?.reasonName;
+          saveDomain.keterangan = argModel?.keterangan;
+          saveDomain.status_kembali = argModel?.statusKembali;
+          saveDomain.photo_1 = argModel?.photo1;
+
+          saveDomain.photo_1_temp = argModel?.photo1;
+          saveDomain.start_date_name = DateFormat('dd-MM-yyyy').format(
+              DateFormat('yyyy-MM-dd').parse(argModel!.startDate!));
+          saveDomain.end_date_name = DateFormat('dd-MM-yyyy').format(
+              DateFormat('yyyy-MM-dd').parse(argModel.endDate!));
+
+          isEnabled = false;
+          isKeterangan = false;
+          isJamKembali = false;
+          if(saveDomain.reason_type_name?.toLowerCase() == "full day"){
+            isKeterangan = true;
+          }else{
+            isJamKembali = true;
+          }
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +135,7 @@ class _InputRekapIzinState extends State<InputRekapIzin> {
               if (state is SaveRekapIzinDone) {
                 isLoading = false;
                 WidgetsBinding.instance
-                    .addPostFrameCallback((_) => Navigator.of(context).pop());
+                    .addPostFrameCallback((_) => Get.back());
               }
 
               return SingleChildScrollView(
@@ -115,6 +166,7 @@ class _InputRekapIzinState extends State<InputRekapIzin> {
                                     textInputAction: TextInputAction.next,
                                     style: TextStyle(fontSize: 15),
                                     readOnly: true,
+                                    enabled: isEnabled,
                                     decoration: InputDecoration(
                                       hintText: "Nama",
                                       border: OutlineInputBorder(
@@ -142,6 +194,7 @@ class _InputRekapIzinState extends State<InputRekapIzin> {
                                   textInputAction: TextInputAction.next,
                                   style: TextStyle(fontSize: 15),
                                   readOnly: true,
+                                  enabled: isEnabled,
                                   onTap: () {
                                     _dialogTipeIzin(context);
                                   },
@@ -176,6 +229,7 @@ class _InputRekapIzinState extends State<InputRekapIzin> {
                                   textInputAction: TextInputAction.next,
                                   style: TextStyle(fontSize: 15),
                                   readOnly: true,
+                                  enabled: isEnabled,
                                   onTap: () {
                                     if (saveDomain.reason_type != null) {
                                       _dialogKategoriIzin(context);
@@ -220,6 +274,7 @@ class _InputRekapIzinState extends State<InputRekapIzin> {
                                           textInputAction: TextInputAction.next,
                                           style: TextStyle(fontSize: 15),
                                           readOnly: true,
+                                          enabled: isEnabled,
                                           onTap: () {
                                             _dialogStartDate(context);
                                           },
@@ -261,6 +316,7 @@ class _InputRekapIzinState extends State<InputRekapIzin> {
                                           textInputAction: TextInputAction.next,
                                           style: TextStyle(fontSize: 15),
                                           readOnly: true,
+                                          enabled: isEnabled,
                                           onTap: () {
                                             _dialogEndDate(context);
                                           },
@@ -307,6 +363,7 @@ class _InputRekapIzinState extends State<InputRekapIzin> {
                                           textInputAction: TextInputAction.next,
                                           style: TextStyle(fontSize: 15),
                                           readOnly: true,
+                                          enabled: isEnabled,
                                           onTap: () {
                                             _dialogStartTime(context);
                                           },
@@ -348,6 +405,7 @@ class _InputRekapIzinState extends State<InputRekapIzin> {
                                           textInputAction: TextInputAction.next,
                                           style: TextStyle(fontSize: 15),
                                           readOnly: true,
+                                          enabled: isEnabled,
                                           onTap: () {
                                             _dialogEndTime(context);
                                           },
@@ -384,6 +442,7 @@ class _InputRekapIzinState extends State<InputRekapIzin> {
                                     ..text = saveDomain.keterangan ?? "",
                                   keyboardType: TextInputType.text,
                                   textInputAction: TextInputAction.done,
+                                  enabled: isEnabled,
                                   style: TextStyle(fontSize: 15),
                                   validator: (value) {
                                     saveDomain.keterangan = value;
@@ -424,25 +483,19 @@ class _InputRekapIzinState extends State<InputRekapIzin> {
                                     IconButton(
                                         icon: const Icon(Icons.edit,
                                             color: Colors.amber),
-                                        onPressed: () {
-                                          _dialogPhoto();
-                                        }),
+                                        onPressed: isEnabled == true ? () {
+                                          pickerPhoto(ImageSource.camera, (path) {
+                                            setState(() {
+                                              saveDomain.photo_1_temp = path;
+                                            });
+                                          });
+                                        } : null),
                                     IconButton(
                                         icon: const Icon(Icons.add_rounded,
                                             color: Colors.lightGreen),
                                         onPressed: () {})
                                   ]),
-                                  Container(
-                                      width: double.infinity,
-                                      height: 150,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(20)),
-                                        image: DecorationImage(
-                                            image: FileImage(
-                                                File(saveDomain.photo_1_temp ?? "")),
-                                            fit: BoxFit.cover),
-                                      ))
+                                  _loadFileFoto(saveDomain.photo_1_temp)
                                 ]),
                               ),
                             ),
@@ -452,7 +505,7 @@ class _InputRekapIzinState extends State<InputRekapIzin> {
                                 child: SizedBox(
                                   width: double.infinity,
                                   child: ElevatedButton(
-                                    onPressed: () {
+                                    onPressed: isEnabled == true ? () {
                                       if (_formKey.currentState!.validate()) {
                                         BlocProvider.of<
                                                     RemoteSaveRekapIzinBloc>(
@@ -460,11 +513,11 @@ class _InputRekapIzinState extends State<InputRekapIzin> {
                                                 listen: false)
                                             .add(SaveRekapIzin(saveDomain));
                                       }
-                                    },
+                                    } : null,
                                     style: ButtonStyle(
                                         backgroundColor:
                                             MaterialStateProperty.all(
-                                                colorPrimaryDark),
+                                                isEnabled == true ? colorPrimaryDark : Colors.black12),
                                         shape: MaterialStateProperty.all(
                                             RoundedRectangleBorder(
                                                 borderRadius:
@@ -551,10 +604,7 @@ class _InputRekapIzinState extends State<InputRekapIzin> {
                             saveDomain.keterangan = null;
                           }
 
-                          BlocProvider<LocalGetMasterBloc>(
-                              create: (context) => get()..add(GetMasterReason(model.id!)));
-
-                          Navigator.pop(context);
+                          Get.back();
                         });
                       },
                     );
@@ -624,7 +674,7 @@ class _InputRekapIzinState extends State<InputRekapIzin> {
                           saveDomain.reason_id = model.id.toString();
                           saveDomain.reason_name = model.name;
 
-                          Navigator.pop(context);
+                          Get.back();
                         });
                       },
                     );
@@ -704,13 +754,35 @@ class _InputRekapIzinState extends State<InputRekapIzin> {
     }
   }
 
-  Future<void> _dialogPhoto() async {
-    final picked = await ImagePicker()
-        .pickImage(source: ImageSource.camera, imageQuality: 70);
-    if (picked == null) return;
-
-    setState(() {
-      saveDomain.photo_1_temp = picked.path;
-    });
+  _loadFileFoto(String? photoTemp) {
+    if(!photoTemp.isNull) {
+      if (photoTemp!.contains("https")){
+        return CachedNetworkImage(
+          imageUrl: photoTemp,
+          imageBuilder: (context, imageProvider) => Container(
+            width: double.infinity,
+            height: 150,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                image: DecorationImage(image: imageProvider, fit: BoxFit.cover)
+            )
+          )
+        );
+      }
+      else{
+        return Container(
+            width: double.infinity,
+            height: 150,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(20)),
+                image: DecorationImage(
+                    image: FileImage(File(photoTemp)),
+                    fit: BoxFit.cover
+                )
+            )
+        );
+      }
+    }
+    return Container(height: 150);
   }
 }

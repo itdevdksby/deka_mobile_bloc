@@ -39,6 +39,25 @@ class RekapIzinTile extends StatelessWidget {
   }
 
   Widget _buildTitleAndDescription() {
+    var textApproval = rekapIzin?.descApproval ?? "";
+    var colorApproval = Colors.black12;
+    if (int.parse(rekapIzin?.statusApproval ?? "0") == 1){
+      colorApproval = Colors.black12;
+    }
+    if (int.parse(rekapIzin?.statusApproval ?? "0") == 2){
+      colorApproval = Colors.amber;
+    }
+    if (int.parse(rekapIzin?.statusApproval ?? "0") == 3){
+      colorApproval = Colors.pink;
+    }
+    if (int.parse(rekapIzin?.statusApproval ?? "0") == 3){
+      colorApproval = Colors.red;
+    }
+    if (int.parse(rekapIzin!.status!) == 0){
+      colorApproval = Colors.red;
+      textApproval = "Dibatalkan";
+    }
+
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(10),
@@ -100,10 +119,10 @@ class RekapIzinTile extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              rekapIzin?.descApproval ?? "",
-              style: const TextStyle(
+              textApproval,
+              style: TextStyle(
                   fontSize: 12,
-                  color: Colors.amber,
+                  color: colorApproval,
                   fontWeight: FontWeight.w700,
                   fontStyle: FontStyle.italic),
             ),

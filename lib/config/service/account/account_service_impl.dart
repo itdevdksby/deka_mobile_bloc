@@ -9,8 +9,8 @@ part of 'account_service.dart';
 class AccountServiceImpl implements AccountService {
   AccountServiceImpl(this._dio) {
     _dio.options.baseUrl = BASE_URL;
-    _dio.options.connectTimeout = BASE_TIMEOUT;
-    _dio.options.sendTimeout = BASE_TIMEOUT;
+    _dio.options.connectTimeout = Duration(seconds: BASE_TIMEOUT);
+    _dio.options.sendTimeout = Duration(seconds: BASE_TIMEOUT);
   }
 
   final Dio _dio;

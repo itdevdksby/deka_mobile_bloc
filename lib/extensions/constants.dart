@@ -27,26 +27,16 @@ List<SingleSelectDomain> listLokasi = [
   SingleSelectDomain(codeOrId: "1", message: "Pati"),
 ];
 
-List<String> listTipeIzin = [
-  "Full Day",
-  "Half Day",
-];
-
-List<String> listKategoriIzin1 = ["Cuti", "Sakit", "Menikah"];
-
-List<String> listKategoriIzin2 = [
-  "Izin Keluar",
-  "Izin Pulang Cepat",
-  "Izin Datang Terlambat",
-  "Izin Keperluan Mendadak",
-];
-
 List<PengaturanAutocodeAndroidEntity> listPengaturanAutocode = [
   PengaturanAutocodeAndroidEntity(code: "last-sync-hc_reason", value: "0"),
   PengaturanAutocodeAndroidEntity(code: "last-sync-hc_reason_type", value: "0"),
   PengaturanAutocodeAndroidEntity(code: "last-sync-hc_data_pic", value: "0"),
-  PengaturanAutocodeAndroidEntity(
-      code: "last-sync-android_auth_menu", value: "0"),
+  PengaturanAutocodeAndroidEntity(code: "last-sync-android_auth_menu", value: "0"),
   PengaturanAutocodeAndroidEntity(code: "hc-address", value: "0"),
   PengaturanAutocodeAndroidEntity(code: "hc-contact", value: "0"),
 ];
+
+extension StringCasingExtension on String {
+  String toCapitalized() => length > 0 ?'${this[0].toUpperCase()}${substring(1).toLowerCase()}':'';
+  String toTitleCase() => replaceAll(RegExp(' +'), ' ').split(' ').map((str) => str.toCapitalized()).join(' ');
+}

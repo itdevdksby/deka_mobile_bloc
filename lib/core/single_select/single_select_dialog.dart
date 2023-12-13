@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../resource/colors.dart';
 import 'item_single_select.dart';
@@ -33,7 +34,7 @@ dialogSingleSelect(BuildContext context, List<SingleSelectDomain> listItem,
                   model: listItem[index],
                   onPressed: (position, model) {
                     onPressed(position, model);
-                    Navigator.pop(context);
+                    Get.back();
                   },
                 );
               },

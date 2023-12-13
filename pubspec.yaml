@@ -20,6 +20,9 @@ dependencies:
   #comparing dart objects
   equatable: ^2.0.5
 
+  #getX
+  get: ^4.6.6
+
   #service locator
   get_it: ^7.6.0
 
@@ -81,7 +84,8 @@ flutter:
     - assets/images/img_logo_apps.png
     - assets/icons/ic_launcher_round.png
 
-flutter_icons:
+flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
+  remove_alpha_ios: true
   image_path: "assets/icons/ic_launcher_round.png"

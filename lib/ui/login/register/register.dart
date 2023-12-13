@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -19,7 +20,7 @@ import '../../../ui/login/register/bloc/remote/remote_check_nik_bloc.dart';
 import '../../../ui/login/register/bloc/remote/remote_register_bloc.dart';
 
 class Register extends StatefulWidget {
-  static const nameRoute = 'Register';
+  static const nameRoute = '/Register';
 
   const Register({super.key});
 
@@ -70,7 +71,7 @@ class _RegisterState extends State<Register> {
                 if (state is RegisterResponseDone) {
                   _isLoading = false;
                   WidgetsBinding.instance
-                      .addPostFrameCallback((_) => Navigator.of(context).pop());
+                      .addPostFrameCallback((_) => Get.back());
                 }
 
                 return _buildForm();
@@ -180,7 +181,7 @@ class _RegisterState extends State<Register> {
                                       color: Colors.white,
                                       strokeWidth: 2,
                                     ))
-                                : Icon(Icons.search),
+                                : Icon(Icons.search, color: Colors.white),
                           )
                         ]),
                         Visibility(

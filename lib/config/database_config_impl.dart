@@ -91,7 +91,8 @@ class _$DatabaseConfig extends DatabaseConfig {
   ProfileDao? _profileDao;
   @override
   ProfileDao get profileDao =>
-      _profileDao ??= ProfileDaoImpl(database, changeListener);
+      _profileDao ??=
+          ProfileDaoImpl(database, changeListener);
 
   PengaturanAutocodeAndroidDao? _pengaturanAutocodeAndroidDao;
   @override
@@ -99,13 +100,27 @@ class _$DatabaseConfig extends DatabaseConfig {
       _pengaturanAutocodeAndroidDao ??=
           PengaturanAutocodeAndroidDaoImpl(database, changeListener);
 
-  MasterReasonDao? _masterReasonDao;
-  @override
-  MasterReasonDao get masterReasonDao =>
-      _masterReasonDao ??= MasterReasonDaoImpl(database, changeListener);
-
   MasterReasonTypeDao? _masterReasonTypeDao;
   @override
-  MasterReasonTypeDao get masterReasonTypeDao => _masterReasonTypeDao ??=
-      MasterReasonTypeDaoImpl(database, changeListener);
+  MasterReasonTypeDao get masterReasonTypeDao =>
+      _masterReasonTypeDao ??=
+          MasterReasonTypeDaoImpl(database, changeListener);
+
+  MasterReasonHcDao? _masterReasonHcDao;
+  @override
+  MasterReasonHcDao get masterReasonHcDao =>
+      _masterReasonHcDao ??=
+          MasterReasonHcDaoImpl(database, changeListener);
+
+  MasterPicDao? _masterPicDao;
+  @override
+  MasterPicDao get masterPicDao =>
+      _masterPicDao ??=
+          MasterPicDaoImpl(database, changeListener);
+
+  MasterAuthMenuDao? _masterAuthMenuDao;
+  @override
+  MasterAuthMenuDao get masterAuthMenuDao =>
+      _masterAuthMenuDao ??=
+          MasterAuthMenuDaoImpl(database, changeListener);
 }

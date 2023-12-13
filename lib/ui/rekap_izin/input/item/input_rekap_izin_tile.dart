@@ -1,13 +1,15 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:deka_mobile/models/entities/master_reason_type/master_reason_type.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../models/entities/master_reason_hc/master_reason_hc.dart';
 import '../../../../resource/colors.dart';
 
 class TipeIzinTile extends StatelessWidget {
   final int ? position;
-  final String ? model;
-  final void Function(int idIndex, String model) ? onPressed;
+  final MasterReasonTypeEntity ? model;
+  final void Function(int idIndex, MasterReasonTypeEntity model) ? onPressed;
 
   const TipeIzinTile({
     Key ? key,
@@ -19,46 +21,47 @@ class TipeIzinTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: _onTap,
       child: Padding(padding: EdgeInsets.only(left: 20, right: 20),
-          child: Container(
+          child: SizedBox(
               width: double.infinity,
               child: TextButton(
                 onPressed: (){
-                  _onTap();
+                  onPressed!(position!, model!);
                 },
-                child: Text(model!, style: TextStyle(color: colorText)),
+                child: Text(model!.name!, style: TextStyle(color: colorText)),
               )
           )
       )
     );
   }
+}
 
-  void _onTap() {
-    var idIndex = position;
-    switch(model) {
-      case "Cuti":
-        idIndex = 4;
-        break;
-      case "Sakit":
-        idIndex = 5;
-        break;
-      case "Menikah":
-        idIndex = 6;
-        break;
-      case "Izin Keluar":
-        idIndex = 3;
-        break;
-      case "Izin Pulang Cepat":
-        idIndex = 2;
-        break;
-      case "Izin Datang Terlambat":
-        idIndex = 1;
-        break;
-      case "Izin Keperluan Mendadak":
-        idIndex = 10;
-        break;
-    }
-    onPressed!(idIndex!, model!);
+class KategoriIzinTile extends StatelessWidget {
+  final int ? position;
+  final MasterReasonHcEntity ? model;
+  final void Function(int idIndex, MasterReasonHcEntity model) ? onPressed;
+
+  const KategoriIzinTile({
+    Key ? key,
+    this.position,
+    this.model,
+    this.onPressed,
+  }): super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+        child: Padding(padding: EdgeInsets.only(left: 20, right: 20),
+            child: SizedBox(
+                width: double.infinity,
+                child: TextButton(
+                  onPressed: (){
+                    onPressed!(position!, model!);
+                  },
+                  child: Text(model!.name!, style: TextStyle(color: colorText)),
+                )
+            )
+        )
+    );
   }
 }

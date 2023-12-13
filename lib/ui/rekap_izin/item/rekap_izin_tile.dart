@@ -1,3 +1,4 @@
+import 'package:deka_mobile/extensions/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -7,12 +8,12 @@ class RekapIzinTile extends StatelessWidget {
   final RekapIzinModel? rekapIzin;
   final bool? isRemovable;
   final void Function(RekapIzinModel rekapIzin)? onRemove;
-  final void Function(RekapIzinModel rekapIzin)? onArticlePressed;
+  final void Function(RekapIzinModel rekapIzin)? onPressed;
 
   const RekapIzinTile({
     Key? key,
     this.rekapIzin,
-    this.onArticlePressed,
+    this.onPressed,
     this.isRemovable = false,
     this.onRemove,
   }) : super(key: key);
@@ -38,6 +39,25 @@ class RekapIzinTile extends StatelessWidget {
   }
 
   Widget _buildTitleAndDescription() {
+    var textApproval = rekapIzin?.descApproval ?? "";
+    var colorApproval = Colors.black12;
+    if (int.parse(rekapIzin?.statusApproval ?? "0") == 1){
+      colorApproval = Colors.black12;
+    }
+    if (int.parse(rekapIzin?.statusApproval ?? "0") == 2){
+      colorApproval = Colors.amber;
+    }
+    if (int.parse(rekapIzin?.statusApproval ?? "0") == 3){
+      colorApproval = Colors.pink;
+    }
+    if (int.parse(rekapIzin?.statusApproval ?? "0") == 3){
+      colorApproval = Colors.red;
+    }
+    if (int.parse(rekapIzin!.status!) == 0){
+      colorApproval = Colors.red;
+      textApproval = "Dibatalkan";
+    }
+
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.all(10),
@@ -56,7 +76,7 @@ class RekapIzinTile extends StatelessWidget {
               color: Colors.black38,
             ),
             Text(
-              rekapIzin?.reasonName ?? "",
+              (rekapIzin?.reasonName ?? "").toString().toTitleCase(),
               style: const TextStyle(
                 fontSize: 12,
                 color: Colors.teal,
@@ -99,10 +119,10 @@ class RekapIzinTile extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              rekapIzin?.descApproval ?? "",
-              style: const TextStyle(
+              textApproval,
+              style: TextStyle(
                   fontSize: 12,
-                  color: Colors.amber,
+                  color: colorApproval,
                   fontWeight: FontWeight.w700,
                   fontStyle: FontStyle.italic),
             ),
@@ -113,8 +133,8 @@ class RekapIzinTile extends StatelessWidget {
   }
 
   void _onTap() {
-    if (onArticlePressed != null) {
-      onArticlePressed!(rekapIzin!);
+    if (onPressed != null) {
+      onPressed!(rekapIzin!);
     }
   }
 }

@@ -28,8 +28,18 @@ class RemoteLoginBloc extends Bloc<RemoteLoginEvent, BaseBlocState> {
       emit(SyncDataMasterResponse("Sedang Sync Data Reason Type"));
       var syncResult = await useCaseSyncDataMaster.updateMasterReasonType(syncDataMaster.data!);
 
-      emit(SyncDataMasterResponse("Sedang Sync Data Reason"));
-      syncResult = await useCaseSyncDataMaster.updateMasterReason(syncDataMaster.data!).whenComplete(() => emit(LoginResponseDone(dataState.data!)));
+      emit(SyncDataMasterResponse("Sedang Sync Data Reason HC"));
+      syncResult = await useCaseSyncDataMaster.updateMasterReasonHc(syncDataMaster.data!);
+
+      emit(SyncDataMasterResponse("Sedang Sync Data PIC"));
+      syncResult = await useCaseSyncDataMaster.updateMasterPic(syncDataMaster.data!);
+
+      emit(SyncDataMasterResponse("Sedang Sync Data Auth Menu"));
+      syncResult = await useCaseSyncDataMaster.updateMasterAuthMenu(syncDataMaster.data!);
+
+      emit(SyncDataMasterResponse("Sedang Sync Data Global Parameter"));
+      syncResult = await useCaseSyncDataMaster.updateMasterGlobalParameter(syncDataMaster.data!)
+          .whenComplete(() => emit(LoginResponseDone(dataState.data!)));
 
       if (syncResult is DataFailed) {
         return emit(BaseResponseError(dataState.error!));

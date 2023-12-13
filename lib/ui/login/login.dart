@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 
 import '../../../core/data/bloc_state.dart';
 import '../../../extensions/constants.dart';
@@ -15,7 +16,7 @@ import '../../resource/colors.dart';
 import '../../resource/showSnackbarMessage.dart';
 
 class Login extends StatefulWidget {
-  static const nameRoute = 'Login';
+  static const nameRoute = '/Login';
   const Login({super.key});
 
   @override
@@ -88,8 +89,7 @@ class _LoginState extends State<Login> {
               if (state is LoginResponseDone) {
                 _isLoading = false;
                 WidgetsBinding.instance.addPostFrameCallback((_) =>
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        Dashboard.nameRoute, (Route<dynamic> route) => false));
+                    Get.offAllNamed(Dashboard.nameRoute));
               }
 
               return Form(
@@ -191,8 +191,7 @@ class _LoginState extends State<Login> {
                                 alignment: Alignment.topRight,
                                 child: TextButton(
                                   onPressed: () {
-                                    Navigator.of(context)
-                                        .pushNamed(ResetPassword.nameRoute);
+                                    Get.toNamed(ResetPassword.nameRoute);
                                   },
                                   child: Text("Reset Password",
                                       style: TextStyle(color: colorText)),
@@ -254,8 +253,7 @@ class _LoginState extends State<Login> {
                                 alignment: Alignment.center,
                                 child: TextButton(
                                   onPressed: () {
-                                    Navigator.of(context)
-                                        .pushNamed(Register.nameRoute);
+                                    Get.toNamed(Register.nameRoute);
                                   },
                                   child: Text("Daftar Sekarang ?",
                                       style: TextStyle(

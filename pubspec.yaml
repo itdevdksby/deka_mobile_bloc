@@ -27,22 +27,22 @@ dependencies:
   get_it: ^7.6.0
 
   #dateFormat
-  intl: ^0.18.1
+  intl: ^0.19.0
 
   #Database
   floor: ^1.4.2
 
   #make request to api
-  retrofit: ^3.3.1
+  retrofit: ^4.0.3
 
   #Hooks
-  flutter_hooks: ^0.18.3
+  flutter_hooks: ^0.20.3
 
   #chached image
   cached_network_image: ^3.2.0
 
   #image picker
-  image_picker: ^0.8.6
+  image_picker: ^1.0.5
 
   #compressor
   flutter_image_compress: ^2.0.0
@@ -52,19 +52,19 @@ dependencies:
 
   #get device info
   device_info_plus: ^9.1.1
-  android_id: ^0.2.0
+  android_id: ^0.3.6
   sqflite: ^2.3.0
-  dio: ^4.0.6
+  dio: ^5.4.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^2.0.0
-  flutter_launcher_icons: "^0.13.1"
+  flutter_lints: ^3.0.1
+  flutter_launcher_icons: ^0.13.1
   floor_generator: 1.4.2
-  retrofit_generator: 4.2.0
-  build_runner: 2.3.3
+  retrofit_generator: ^8.0.5
+  build_runner: ^2.4.7
 
 flutter:
   uses-material-design: true
